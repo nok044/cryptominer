@@ -3,9 +3,9 @@ var fetch = require('node-fetch');
 
 var sendMessage = function(event, message){
     event.reply(message).then(function (data) {
-        console[key].log(data)
+        console.log(data)
     }).catch(function (error) {
-        console[key].log(error)
+        console.log(error)
     });
 }
 
