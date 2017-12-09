@@ -13,7 +13,7 @@ bot.on('message', function (event) {
             return res.json();
         }).then(function(body) {
 
-            event.reply(body["1"].last_price+' '+body["1"].change).then(function (data) {
+            event.reply('BTC to BTH '+body["1"].last_price+' '+body["1"].change+'%').then(function (data) {
                 console.log(data)
             }).catch(function (error) {
                 console.log(error)
