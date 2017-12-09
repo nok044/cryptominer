@@ -33,7 +33,7 @@ bot.on('message', function (event) {
                 Object.keys(res).forEach(function(key,index) {
                     if((res[key].primary_currency === currents[0] && res[key].secondary_currency === currents[1]) || (res[key].primary_currency === currents[1] && res[key].secondary_currency === currents[0])){
                         found = true;
-                        sendMessage(event, res[key].primary_currency+' to '+res[key].secondary_currency+' '+body["1"].last_price+' '+body["1"].change+'%')
+                        sendMessage(event, res[key].primary_currency+' to '+res[key].secondary_currency+' '+res[key].last_price+' '+res[key].change+'%')
                     }
                 });
 
