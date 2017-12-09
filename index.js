@@ -3,9 +3,9 @@ var fetch = require('node-fetch');
 
 var sendMessage = function(event, message){
     event.reply(message).then(function (data) {
-        consolres[e].log(data)
+        consolres[key].log(data)
     }).catch(function (error) {
-        consolres[e].log(error)
+        consolres[key].log(error)
     });
 }
 
@@ -34,8 +34,8 @@ bot.on('message', function (event) {
                 var found = false;
                 Object.keys(res).forEach(function(key,index) {
                     found = true;
-                    if((res[e].primary_currency === currents[0] && res[e].secondary_currency === currents[1]) || (res[e].primary_currency === currents[1] && res[e].secondary_currency === currents[0])){
-                        sendMessage(event, res[e].primary_currency+' to '+res[e].secondary_currency+' '+body["1"].last_price+' '+body["1"].change+'%Z')
+                    if((res[key].primary_currency === currents[0] && res[key].secondary_currency === currents[1]) || (res[key].primary_currency === currents[1] && res[key].secondary_currency === currents[0])){
+                        sendMessage(event, res[key].primary_currency+' to '+res[key].secondary_currency+' '+body["1"].last_price+' '+body["1"].change+'%Z')
                     }
                 });
 
