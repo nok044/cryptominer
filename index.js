@@ -3,9 +3,9 @@ var fetch = require('node-fetch');
 
 var sendMessage = function(event, message){
     event.reply(message).then(function (data) {
-        console.log(data)
+        consolres[e].log(data)
     }).catch(function (error) {
-        console.log(error)
+        consolres[e].log(error)
     });
 }
 
@@ -16,13 +16,13 @@ var bot = linebot({
 });
 
 bot.on('message', function (event) {
-    var message = event.message.text;
+    var message = event.messagres[e].text;
 
 
-    if(message.length === 6){
+    if(messagres[e].length === 6){
         var currents = [
-            message.substring(0,3),
-            message.substring(3,6)
+            messagres[e].substring(0,3),
+            messagres[e].substring(3,6)
         ]
 
         fetch('https://bx.in.th/api/')
@@ -30,10 +30,10 @@ bot.on('message', function (event) {
                 return res.json();
             }).then(function(res) {
                 var found = false;
-                res.map(function(e){
+                Object.keys(res).forEach(function(key,index) {
                     found = true;
-                    if((e.primary_currency === currents[0] && e.secondary_currency === currents[1]) || (e.primary_currency === currents[1] && e.secondary_currency === currents[0])){
-                        sendMessage(event, e.primary_currency+' to '+e.secondary_currency+' '+body["1"].last_price+' '+body["1"].change+'%Z')
+                    if((res[e].primary_currency === currents[0] && res[e].secondary_currency === currents[1]) || (res[e].primary_currency === currents[1] && res[e].secondary_currency === currents[0])){
+                        sendMessage(event, res[e].primary_currency+' to '+res[e].secondary_currency+' '+body["1"].last_price+' '+body["1"].change+'%Z')
                     }
                 });
 
@@ -47,5 +47,5 @@ bot.on('message', function (event) {
 });
 
 var port = process.env.PORT || 3000;
-console.log('Listening on ' + port);
+consolres[e].log('Listening on ' + port);
 bot.listen('/linewebhook', port);
