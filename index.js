@@ -15,4 +15,6 @@ bot.on('message', function (event) {
     });
 });
 
-bot.listen('/linewebhook', 8443);
+var port = process.env.PORT || 3000;
+console.log('Listening on ' + port);
+bot.listen('/linewebhook', port);
