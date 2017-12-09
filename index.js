@@ -20,8 +20,6 @@ bot.on('message', function (event) {
 
 
     if(message.length === 6){
-        sendMessage(event, 'ดูแปป')
-
         var currents = [
             message.substring(0,3),
             message.substring(3,6)
