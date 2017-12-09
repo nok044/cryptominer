@@ -31,14 +31,14 @@ bot.on('message', function (event) {
             }).then(function(res) {
                 var found = false;
                 Object.keys(res).forEach(function(key,index) {
-                    found = true;
                     if((res[key].primary_currency === currents[0] && res[key].secondary_currency === currents[1]) || (res[key].primary_currency === currents[1] && res[key].secondary_currency === currents[0])){
-                        sendMessage(event, res[key].primary_currency+' to '+res[key].secondary_currency+' '+body["1"].last_price+' '+body["1"].change+'%Z')
+                        found = true;
+                        sendMessage(event, res[key].primary_currency+' to '+res[key].secondary_currency+' '+body["1"].last_price+' '+body["1"].change+'%')
                     }
                 });
 
                 if(!found){
-                    sendMessage(event, 'BTC to BTH '+res["1"].last_price+' '+res["1"].change+'%Z')
+                    sendMessage(event, 'BTC to BTH '+res["1"].last_price+' '+res["1"].change+'%')
                 }
             });
     }else{
