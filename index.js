@@ -1,4 +1,5 @@
 var linebot = require('linebot');
+var fetch = require('node-fetch');
 
 var bot = linebot({
     channelId: 1551062364,
@@ -7,12 +8,20 @@ var bot = linebot({
 });
 
 bot.on('message', function (event) {
-    console.log(event)
-    event.reply(event.message.text).then(function (data) {
-        console.log(data)
-    }).catch(function (error) {
-        console.log(error)
-    });
+    fetch('https://bx.in.th/api/')
+        .then(function(res) {
+            return res.json();
+        }).then(function(body) {
+
+            event.reply(body["1"].last_price+' '+body["1"].change).then(function (data) {
+                console.log(data)
+            }).catch(function (error) {
+                console.log(error)
+            });
+        });
+
+
+
 });
 
 var port = process.env.PORT || 3000;
