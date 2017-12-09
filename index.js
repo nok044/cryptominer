@@ -16,15 +16,15 @@ var bot = linebot({
 });
 
 bot.on('message', function (event) {
-    var message = event.messagres[e].text;
+    var message = event.message.text;
 
 
     if(messagres[e].length === 6){
         sendMessage(event, 'ดูแปป')
 
         var currents = [
-            messagres[e].substring(0,3),
-            messagres[e].substring(3,6)
+            message.substring(0,3),
+            message.substring(3,6)
         ]
 
         fetch('https://bx.in.th/api/')
