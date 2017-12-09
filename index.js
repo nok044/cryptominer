@@ -1,7 +1,7 @@
 var linebot = require('linebot');
 var fetch = require('node-fetch');
 
-var message = function(event, message){
+var sendMessage = function(event, message){
     event.reply(message).then(function (data) {
         console.log(data)
     }).catch(function (error) {
@@ -33,16 +33,16 @@ bot.on('message', function (event) {
                 res.map(function(e){
                     found = true;
                     if((e.primary_currency === currents[0] && e.secondary_currency === currents[1]) || (e.primary_currency === currents[1] && e.secondary_currency === currents[0])){
-                        message(event, e.primary_currency+' to '+e.secondary_currency+' '+body["1"].last_price+' '+body["1"].change+'%Z')
+                        sendMessage(event, e.primary_currency+' to '+e.secondary_currency+' '+body["1"].last_price+' '+body["1"].change+'%Z')
                     }
                 });
 
                 if(!found){
-                    message(event, 'BTC to BTH '+res["1"].last_price+' '+res["1"].change+'%Z')
+                    sendMessage(event, 'BTC to BTH '+res["1"].last_price+' '+res["1"].change+'%Z')
                 }
             });
     }else{
-        message(event, 'อ๋อเหรอคะ')
+        sendMessage(event, 'อ๋อเหรอคะ')
     }
 });
 
