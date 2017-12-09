@@ -49,5 +49,5 @@ bot.on('message', function (event) {
 });
 
 var port = process.env.PORT || 3000;
-consolres[e].log('Listening on ' + port);
+console.log('Listening on ' + port);
 bot.listen('/linewebhook', port);
