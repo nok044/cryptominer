@@ -32,7 +32,7 @@ bot.on('message', function (event) {
                 var found = false;
                 res.map(function(e){
                     found = true;
-                    if((e.primary_currency === currents[0] && e.secondary_currency === currents[1]) || (e.primary_currency === currents[1] && e.secondary_currency === currents[0]){
+                    if((e.primary_currency === currents[0] && e.secondary_currency === currents[1]) || (e.primary_currency === currents[1] && e.secondary_currency === currents[0])){
                         message(event, e.primary_currency+' to '+e.secondary_currency+' '+body["1"].last_price+' '+body["1"].change+'%Z')
                     }
                 });
