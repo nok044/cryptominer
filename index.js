@@ -132,7 +132,7 @@ setInterval(function(){
                     multiply++;
                     lastTrigger = new Date().getMilliseconds();
                 }else{
-                    console.log(new Date().getMilliseconds() - lastTrigger)
+                    console.log(new Date().getMilliseconds(),lastTrigger,new Date().getMilliseconds() - lastTrigger)
                 }
             });
     }
