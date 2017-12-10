@@ -51,7 +51,10 @@ bot.on('message', function (event) {
                 found = true;
         }
         if(!found) {
-            sendMessage(event, 'รอแปป')
+            sendMessage(event, {
+                type: 'text',
+                text: '\uDBC0\uDC84'
+            })
             observerList.push(event.source.userId);
         }else{
             sendMessage(event, 'ก็รายงานอยู่นี้ไง ใจเย็นดิ')
