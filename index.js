@@ -72,6 +72,7 @@ console.log('Listening on ' + port);
 bot.listen('/linewebhook', port);
 
 var lastTrigger = new Date();
+var multiply = 1;
 var state;
 var latest
 
@@ -112,8 +113,9 @@ setInterval(function(){
                             text: str
                         });
                     }
+                    multiply = 1;
                     lastTrigger = new Date();
-                }else if(new Date().getMilliseconds() - lastTrigger.getMilliseconds() >= 60000){
+                }else if(new Date().getMilliseconds() - lastTrigger.getMilliseconds() >= 60000 * multiply){
                     if(latest === undefined)
                         latest = currentLatest;
                     var change = currentLatest - latest;
@@ -127,6 +129,7 @@ setInterval(function(){
                             text: str
                         });
                     }
+                    multiply++;
                     lastTrigger = new Date();
                 }
             });
