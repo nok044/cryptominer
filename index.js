@@ -76,7 +76,7 @@ setInterval(function(){
                 var cum = 0;
                 var min = Number.MAX_SAFE_INTEGER;
                 var max = Number.MIN_SAFE_INTEGER ;
-                for(var i = 0;i<res.trades.length.length;i++) {
+                for(var i = 0;i<res.trades.length;i++) {
                     var t = res.trades[i];
                     cum += t.rate;
                     min = t.rate < min ? t.rate : min;
