@@ -18,6 +18,7 @@ var bot = linebot({
 });
 
 bot.on('message', function (event) {
+    console.log(event)
     var message = event.message.text;
 
 
