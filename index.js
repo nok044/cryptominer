@@ -51,10 +51,7 @@ bot.on('message', function (event) {
                 found = true;
         }
         if(!found) {
-            sendMessage(event, {
-                type: 'text',
-                text: '\uDBC0\uDC84'
-            })
+            sendMessage(event, 'รอแปป')
             observerList.push(event.source.userId);
         }else{
             sendMessage(event, 'ก็รายงานอยู่นี้ไง ใจเย็นดิ')
@@ -108,7 +105,7 @@ setInterval(function(){
                     latest = currentLatest;
                     for(var i = 0;i<observerList.length;i++) {
                         var userId = observerList[i];
-                        str = (state === 'up' ? '0x100077 ขึ้นละจ้า' : '0x10007E  ลงแล้วๆ')+' '+change.toFixed(2)+'% BTC Latest: '+currentLatest.toFixed(2)+' High: '+max.toFixed(2)+' Low:'+min.toFixed(2)+' Avg: '+avg.toFixed(2);
+                        str = (state === 'up' ? '\uDBC0\uDC5C ขึ้นละจ้า' : '\uDBC0\uDC7E ลงแล้วๆ')+' '+change.toFixed(2)+'% BTC Latest: '+currentLatest.toFixed(2)+' High: '+max.toFixed(2)+' Low:'+min.toFixed(2)+' Avg: '+avg.toFixed(2);
                         bot.push(userId, {
                             type: 'text',
                             text: str
