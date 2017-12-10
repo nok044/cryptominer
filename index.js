@@ -44,6 +44,7 @@ bot.on('message', function (event) {
                 }
             });
     }else if(message === 'รายงานมาซิ'){
+        console.log(event,event.source.type,event.source.type === 'group')
         var id = event.source.type === 'group' ? event.source.groupId : event.source.userId;
         var found = false;
         for(var i = 0;i<observerList.length;i++){
