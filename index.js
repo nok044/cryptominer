@@ -1,6 +1,8 @@
 var linebot = require('linebot');
 var fetch = require('node-fetch');
 
+var observerList = [];
+
 var sendMessage = function(event, message){
     event.reply(message).then(function (data) {
         console.log(data)
@@ -41,6 +43,21 @@ bot.on('message', function (event) {
                     sendMessage(event, 'BTC to BTH '+res["1"].last_price+' '+res["1"].change+'%')
                 }
             });
+    }else if(message === 'รายงานมาซิ'){
+        var found = false;
+        for(var i = 0;i<observerList.length;i++){
+            var userId = observerList[i];
+            if(userId === event.source.userId)
+                found = true;
+        }
+        if(!found)
+            observerList.push(event.source.userId);
+    }else if(message === 'พอได้แล้ว'){
+        for(var i = 0;i<observerList.length;i++){
+            var userId = observerList[i];
+            if(userId === event.source.userId)
+                observerList.splice(i, 1);
+        }
     }else{
         sendMessage(event, 'อ๋อเหรอคะ')
     }
@@ -49,3 +66,27 @@ bot.on('message', function (event) {
 var port = process.env.PORT || 3000;
 console.log('Listening on ' + port);
 bot.listen('/linewebhook', port);
+
+setInterval(function(){
+    if(observerList.length > 0){
+        fetch('https://bx.in.th/api/')
+            .then(function(res) {
+                return res.json();
+            }).then(function(res) {
+                var cum = 0;
+                var min = Number.MAX_SAFE_INTEGER;
+                var max = Number.MIN_SAFE_INTEGER ;
+                res.trades.map(function(t){
+                    cum += t.rate;
+                    min = t.rate < min ? t.rate : min;
+                    max = t.rate > min ? t.rate : max;
+                })
+                var avr = cum/res.trades.length;
+
+                for(var i = 0;i<observerList.length;i++) {
+                    var userId = observerList[i];
+                    bot.push(userId, avr);
+                }
+            });
+    }
+}, 1000);
