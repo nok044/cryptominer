@@ -83,6 +83,7 @@ setInterval(function(){
                     min = t.rate < min ? t.rate : min;
                     max = t.rate > min ? t.rate : max;
                 }
+                console.log(cum,res.trades.length)
                 var avg = cum/res.trades.length;
 
                 for(var i = 0;i<observerList.length;i++) {
