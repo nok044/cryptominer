@@ -76,17 +76,18 @@ setInterval(function(){
                 var cum = 0;
                 var min = Number.MAX_SAFE_INTEGER;
                 var max = Number.MIN_SAFE_INTEGER ;
+                var latest = res.trades[res.trades.length-1].rate
                 for(var i = 0;i<res.trades.length;i++) {
                     var t = res.trades[i];
                     cum += t.rate;
                     min = t.rate < min ? t.rate : min;
                     max = t.rate > min ? t.rate : max;
                 }
-                var avr = cum/res.trades.length;
+                var avg = cum/res.trades.length;
 
                 for(var i = 0;i<observerList.length;i++) {
                     var userId = observerList[i];
-                    bot.push(userId, avr);
+                    bot.push(userId, 'BTC Latest: '+latest+' High: '+max+' Low:'+min+' Avg: '+avg);
                 }
             });
     }
