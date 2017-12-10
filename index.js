@@ -96,7 +96,7 @@ setInterval(function(){
                     max = rate > max ? rate : max;
                 }
                 var avg = cum/res.trades.length;
-                var str = 'BTC Latest: '+currentLatest+' High: '+max+' Low:'+min+' Avg: '+avg;
+                var str = 'BTC Latest: '+currentLatest+' High: '+max+' Low: '+min+' Avg: '+avg;
                 var currentState = currentLatest === max ? 'up' : currentLatest === min ? 'down' : state === undefined ? max - avg > avg - min ? 'up' : 'down' : state;
                 console.log(state,currentState,str)
                 if(state === undefined || state !== currentState){
