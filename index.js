@@ -78,7 +78,7 @@ setInterval(function(){
                 var cum = 0;
                 var min = Number.MAX_SAFE_INTEGER;
                 var max = Number.MIN_SAFE_INTEGER ;
-                var latest = res.trades[res.trades.length-1].rate
+                var latest = parseFloat(res.trades[res.trades.length-1].rate)
                 for(var i = 0;i<res.trades.length;i++) {
                     var t = res.trades[i];
                     var rate = parseFloat(t.rate);
@@ -94,7 +94,7 @@ setInterval(function(){
                     state = currentState;
                     for(var i = 0;i<observerList.length;i++) {
                         var userId = observerList[i];
-                        str = (state === 'up' ? 'ขึ้นละจ้า' : 'ลงแล้วๆ')+str;
+                        str = (state === 'up' ? 'ขึ้นละจ้า' : 'ลงแล้วๆ')+' '+str;
                         bot.push(userId, str);
                     }
                 }
