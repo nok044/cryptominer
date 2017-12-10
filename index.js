@@ -68,6 +68,7 @@ console.log('Listening on ' + port);
 bot.listen('/linewebhook', port);
 
 var state;
+var latest
 
 setInterval(function(){
     if(observerList.length > 0){
@@ -78,23 +79,29 @@ setInterval(function(){
                 var cum = 0;
                 var min = Number.MAX_SAFE_INTEGER;
                 var max = Number.MIN_SAFE_INTEGER ;
-                var latest = parseFloat(res.trades[res.trades.length-1].rate)
+                var currentLatest = parseFloat(res.trades[res.trades.length-1].rate)
                 for(var i = 0;i<res.trades.length;i++) {
                     var t = res.trades[i];
                     var rate = parseFloat(t.rate);
                     cum += rate;
                     min = rate < min ? rate : min;
-                    max = rate > min ? rate : max;
+                    max = rate > max ? rate : max;
                 }
                 var avg = cum/res.trades.length;
-                var str = 'BTC Latest: '+latest+' High: '+max+' Low:'+min+' Avg: '+avg;
-                var currentState = latest === max ? 'up' : latest === min ? 'down' : '';
+                var str = 'BTC Latest: '+currentLatest+' High: '+max+' Low:'+min+' Avg: '+avg;
+                var currentState = currentLatest === max ? 'up' : currentLatest === min ? 'down' : '';
                 console.log(state,currentState,str)
                 if(state !== currentState){
+                    if(latest === undefined)
+                        latest = currentLatest;
+                    var change = currentLatest - latest;
+                    change /= latest;
+                    change *= 100;
                     state = currentState;
+                    latest = currentLatest;
                     for(var i = 0;i<observerList.length;i++) {
                         var userId = observerList[i];
-                        str = (state === 'up' ? 'ขึ้นละจ้า' : 'ลงแล้วๆ')+' '+str;
+                        str = (state === 'up' ? 'ขึ้นละจ้า' : 'ลงแล้วๆ')+' '+change+'% '+str;
                         bot.push(userId, str);
                     }
                 }
