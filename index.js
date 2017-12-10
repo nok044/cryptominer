@@ -105,6 +105,7 @@ setInterval(function(){
                     latest = currentLatest;
                     for(var i = 0;i<observerList.length;i++) {
                         var userId = observerList[i];
+                        console.log('Send to '+userId)
                         str = (state === 'up' ? '\uDBC0\uDC5C ขึ้นละจ้า' : '\uDBC0\uDC7E ลงแล้วๆ')+' '+change.toFixed(2)+'% BTC Latest: '+currentLatest.toFixed(2)+' High: '+max.toFixed(2)+' Low:'+min.toFixed(2)+' Avg: '+avg.toFixed(2);
                         bot.push(userId, {
                             type: 'text',
