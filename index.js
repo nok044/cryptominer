@@ -50,16 +50,20 @@ bot.on('message', function (event) {
             if(userId === event.source.userId)
                 found = true;
         }
-        if(!found)
+        if(!found) {
+            sendMessage(event, 'รอแปป')
             observerList.push(event.source.userId);
+        }else{
+            sendMessage(event, 'ก็รายงานอยู่นี้ไง ใจเย็นดิ')
+        }
     }else if(message === 'พอได้แล้ว'){
         for(var i = 0;i<observerList.length;i++){
             var userId = observerList[i];
             if(userId === event.source.userId)
                 observerList.splice(i, 1);
         }
+        sendMessage(event, 'เครๆ')
     }else{
-
     }
 });
 
