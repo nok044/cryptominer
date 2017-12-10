@@ -87,15 +87,14 @@ setInterval(function(){
                     max = rate > min ? rate : max;
                 }
                 var avg = cum/res.trades.length;
-
-                var currentState = latest === max ? 'up' : state;
-                    currentState = latest === min ? 'down' : state;
-
+                var str = 'BTC Latest: '+latest+' High: '+max+' Low:'+min+' Avg: '+avg;
+                var currentState = latest === max ? 'up' : latest === min ? 'down' : '';
+                console.log(state,currentState,str)
                 if(state !== currentState){
                     state = currentState;
                     for(var i = 0;i<observerList.length;i++) {
                         var userId = observerList[i];
-                        var str = (state === 'up' ? 'ขึ้นละจ้า' : 'ลงแล้วๆ')+'BTC Latest: '+latest+' High: '+max+' Low:'+min+' Avg: '+avg;
+                        str = (state === 'up' ? 'ขึ้นละจ้า' : 'ลงแล้วๆ')+str;
                         bot.push(userId, str);
                     }
                 }
