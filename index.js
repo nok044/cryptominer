@@ -105,8 +105,11 @@ setInterval(function(){
                     latest = currentLatest;
                     for(var i = 0;i<observerList.length;i++) {
                         var userId = observerList[i];
-                        str = (state === 'up' ? 'ขึ้นละจ้า' : 'ลงแล้วๆ')+' '+change.toFixed(2)+'% BTC Latest: '+currentLatest.toFixed(2)+' High: '+max.toFixed(2)+' Low:'+min.toFixed(2)+' Avg: '+avg.toFixed(2);
-                        bot.push(userId, str);
+                        str = (state === 'up' ? '0x100077 ขึ้นละจ้า' : '0x10007E  ลงแล้วๆ')+' '+change.toFixed(2)+'% BTC Latest: '+currentLatest.toFixed(2)+' High: '+max.toFixed(2)+' Low:'+min.toFixed(2)+' Avg: '+avg.toFixed(2);
+                        bot.push(userId, {
+                            type: 'text',
+                            text: str
+                        });
                     }
                 }
             });
