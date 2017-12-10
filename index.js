@@ -69,7 +69,7 @@ bot.listen('/linewebhook', port);
 
 setInterval(function(){
     if(observerList.length > 0){
-        fetch('https://bx.in.th/api/')
+        fetch('https://bx.in.th/api/trade/?pairing=1')
             .then(function(res) {
                 return res.json();
             }).then(function(res) {
