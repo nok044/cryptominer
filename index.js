@@ -67,6 +67,8 @@ var port = process.env.PORT || 3000;
 console.log('Listening on ' + port);
 bot.listen('/linewebhook', port);
 
+var state;
+
 setInterval(function(){
     if(observerList.length > 0){
         fetch('https://bx.in.th/api/trade/?pairing=1')
@@ -79,18 +81,23 @@ setInterval(function(){
                 var latest = res.trades[res.trades.length-1].rate
                 for(var i = 0;i<res.trades.length;i++) {
                     var t = res.trades[i];
-                    cum += t.rate;
-                    min = t.rate < min ? t.rate : min;
-                    max = t.rate > min ? t.rate : max;
+                    var rate = parseFloat(t.rate);
+                    cum += rate;
+                    min = rate < min ? rate : min;
+                    max = rate > min ? rate : max;
                 }
-                console.log(cum,res.trades.length)
                 var avg = cum/res.trades.length;
 
-                for(var i = 0;i<observerList.length;i++) {
-                    var userId = observerList[i];
-                    var str = 'BTC Latest: '+latest+' High: '+max+' Low:'+min+' Avg: '+avg;
-                    console.log(userId,str)
-                    bot.push(userId, str);
+                var currentState = latest === max ? 'up' : state;
+                    currentState = latest === min ? 'down' : state;
+
+                if(state !== currentState){
+                    state = currentState;
+                    for(var i = 0;i<observerList.length;i++) {
+                        var userId = observerList[i];
+                        var str = (state === 'up' ? 'ขึ้นละจ้า' : 'ลงแล้วๆ')+'BTC Latest: '+latest+' High: '+max+' Low:'+min+' Avg: '+avg;
+                        bot.push(userId, str);
+                    }
                 }
             });
     }
