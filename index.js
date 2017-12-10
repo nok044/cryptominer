@@ -44,7 +44,6 @@ bot.on('message', function (event) {
                 }
             });
     }else if(message === 'รายงานมาซิ'){
-        console.log(event,event.source.type,event.source.type === 'group')
         var id = event.source.type === 'group' ? event.source.groupId : event.source.userId;
         var found = false;
         for(var i = 0;i<observerList.length;i++){
@@ -54,7 +53,7 @@ bot.on('message', function (event) {
         }
         if(!found) {
             sendMessage(event, 'รอแปป')
-            observerList.push(event.source.userId);
+            observerList.push(id);
         }else{
             sendMessage(event, 'ก็รายงานอยู่นี้ไง ใจเย็นดิ')
         }
