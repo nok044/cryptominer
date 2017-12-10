@@ -71,7 +71,7 @@ var port = process.env.PORT || 3000;
 console.log('Listening on ' + port);
 bot.listen('/linewebhook', port);
 
-var lastTrigger = new Date();
+var lastTrigger = new Date().getMilliseconds();
 var multiply = 1;
 var state;
 var latest
@@ -114,8 +114,8 @@ setInterval(function(){
                         });
                     }
                     multiply = 1;
-                    lastTrigger = new Date();
-                }else if(new Date().getMilliseconds() - lastTrigger.getMilliseconds() >= 60000 * multiply){
+                    lastTrigger = new Date().getMilliseconds();
+                }else if(new Date().getMilliseconds() - lastTrigger >= 60000 * multiply){
                     if(latest === undefined)
                         latest = currentLatest;
                     var change = currentLatest - latest;
@@ -130,9 +130,9 @@ setInterval(function(){
                         });
                     }
                     multiply++;
-                    lastTrigger = new Date();
+                    lastTrigger = new Date().getMilliseconds();
                 }else{
-                    console.log(new Date().getMilliseconds() - lastTrigger.getMilliseconds())
+                    console.log(new Date().getMilliseconds() - lastTrigger)
                 }
             });
     }
