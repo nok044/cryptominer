@@ -76,11 +76,12 @@ setInterval(function(){
                 var cum = 0;
                 var min = Number.MAX_SAFE_INTEGER;
                 var max = Number.MIN_SAFE_INTEGER ;
-                res.trades.map(function(t){
+                for(var i = 0;i<res.trades.length.length;i++) {
+                    var t = res.trades[i];
                     cum += t.rate;
                     min = t.rate < min ? t.rate : min;
                     max = t.rate > min ? t.rate : max;
-                })
+                }
                 var avr = cum/res.trades.length;
 
                 for(var i = 0;i<observerList.length;i++) {
