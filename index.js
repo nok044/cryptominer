@@ -59,7 +59,7 @@ bot.on('message', function (event) {
                 observerList.splice(i, 1);
         }
     }else{
-        sendMessage(event, 'อ๋อเหรอคะ')
+
     }
 });
 
