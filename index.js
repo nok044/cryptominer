@@ -18,7 +18,6 @@ var bot = linebot({
 });
 
 bot.on('message', function (event) {
-    console.log(event)
     var message = event.message.text;
 
 
@@ -45,10 +44,11 @@ bot.on('message', function (event) {
                 }
             });
     }else if(message === 'รายงานมาซิ'){
+        var id = event.source.type === 'group' ? event.source.groupId : event.source.userId;
         var found = false;
         for(var i = 0;i<observerList.length;i++){
             var userId = observerList[i];
-            if(userId === event.source.userId)
+            if(userId === id)
                 found = true;
         }
         if(!found) {
@@ -58,9 +58,10 @@ bot.on('message', function (event) {
             sendMessage(event, 'ก็รายงานอยู่นี้ไง ใจเย็นดิ')
         }
     }else if(message === 'พอได้แล้ว'){
+        var id = event.source.type === 'group' ? event.source.groupId : event.source.userId;
         for(var i = 0;i<observerList.length;i++){
             var userId = observerList[i];
-            if(userId === event.source.userId)
+            if(userId === id)
                 observerList.splice(i, 1);
         }
         sendMessage(event, 'เครๆ')
