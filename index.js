@@ -131,6 +131,8 @@ setInterval(function(){
                     }
                     multiply++;
                     lastTrigger = new Date();
+                }else{
+                    console.log(new Date().getMilliseconds() - lastTrigger.getMilliseconds())
                 }
             });
     }
