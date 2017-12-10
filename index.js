@@ -93,7 +93,7 @@ setInterval(function(){
                 }
                 var avg = cum/res.trades.length;
                 var str = 'BTC Latest: '+currentLatest+' High: '+max+' Low:'+min+' Avg: '+avg;
-                var currentState = currentLatest === max ? 'up' : currentLatest === min ? 'down' : '';
+                var currentState = currentLatest === max ? 'up' : currentLatest === min ? 'down' : state;
                 console.log(state,currentState,str)
                 if(state !== currentState){
                     if(latest === undefined)
@@ -102,8 +102,8 @@ setInterval(function(){
                     change /= latest;
                     change *= 100;
                     state = currentState;
-                    latest = currentLatest;
                     if((state === 'up' && change >= 0) || (state === 'down' && change <= 0)){
+                        latest = currentLatest;
                         for(var i = 0;i<observerList.length;i++) {
                             var userId = observerList[i];
                             str = (state === 'up' ? 'ขึ้นละจ้า' : 'ลงแล้วๆ')+' '+change.toFixed(2)+'% BTC Latest: '+currentLatest.toFixed(2)+' High: '+max.toFixed(2)+' Low:'+min.toFixed(2)+' Avg: '+avg.toFixed(2);
