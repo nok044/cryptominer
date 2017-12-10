@@ -96,7 +96,7 @@ setInterval(function(){
                 var str = 'BTC Latest: '+currentLatest+' High: '+max+' Low:'+min+' Avg: '+avg;
                 var currentState = currentLatest === max ? 'up' : currentLatest === min ? 'down' : state;
                 console.log(state,currentState,str)
-                if(state !== currentState){
+                if(state === undefined || state !== currentState){
                     if(latest === undefined)
                         latest = currentLatest;
                     var change = currentLatest - latest;
