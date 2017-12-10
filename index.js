@@ -88,7 +88,7 @@ setInterval(function(){
                 for(var i = 0;i<observerList.length;i++) {
                     var userId = observerList[i];
                     var str = 'BTC Latest: '+latest+' High: '+max+' Low:'+min+' Avg: '+avg;
-                    console.log(str)
+                    console.log(userId,str)
                     bot.push(userId, str);
                 }
             });
