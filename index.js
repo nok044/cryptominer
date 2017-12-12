@@ -181,7 +181,10 @@ setInterval(function(){
                         bot.push(userId,'ดู '+hash+' ไม่ได้นะ เลิก');
                         trackList.splice(i, 1);
                     }else{
-                        bot.push(userId,'คอนเฟิร์ม '+hash+' ได้ '+res.confirmations+' อะ');
+                        if(res.confirmations !== obj.confirmations) {
+                            bot.push(userId, 'คอนเฟิร์ม ' + hash + ' ได้ ' + res.confirmations + ' อะ');
+                            obj.confirmations = res.confirmations;
+                        }
                     }
                 });
         }
