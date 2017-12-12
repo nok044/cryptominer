@@ -2,6 +2,7 @@ var linebot = require('linebot');
 var fetch = require('node-fetch');
 
 var observerList = [];
+var trackList = [];
 
 var sendMessage = function(event, message){
     event.reply(message).then(function (data) {
@@ -57,12 +58,39 @@ bot.on('message', function (event) {
         }else{
             sendMessage(event, 'ก็รายงานอยู่นี้ไง ใจเย็นดิ')
         }
-    }else if(message === 'พอได้แล้ว'){
+    }else if(message === 'พอได้แล้ว') {
         var id = event.source.type === 'group' ? event.source.groupId : event.source.userId;
-        for(var i = 0;i<observerList.length;i++){
+        for (var i = 0; i < observerList.length; i++) {
             var userId = observerList[i];
-            if(userId === id)
+            if (userId === id)
                 observerList.splice(i, 1);
+        }
+        sendMessage(event, 'เครๆ')
+    }else if(message.indexOf('ติดตามอันนี้') === 0){
+        var hash = message.substr('ติดตามอันนี้'.length).trim();
+        var id = event.source.type === 'group' ? event.source.groupId : event.source.userId;
+        var found = false;
+        for(var i = 0;i<trackList.length;i++){
+            var obj = trackList[i];
+            if(obj.userId === id && obj.hash === hash)
+                found = true;
+        }
+        if(!found) {
+            sendMessage(event, 'รอแปป')
+            trackList.push({
+                userId: id,
+                hash: hash
+            });
+        }else{
+            sendMessage(event, 'ก็รายงานอยู่นี้ไง ใจเย็นดิ')
+        }
+    }else if(message.indexOf('เลิกดูอันนี้') === 0){
+        var hash = message.substr('เลิกดูอันนี้'.length).trim();
+        var id = event.source.type === 'group' ? event.source.groupId : event.source.userId;
+        for (var i = 0; i < trackList.length; i++) {
+            var obj = trackList[i];
+            if(obj.userId === id && obj.hash === hash)
+                trackList.splice(i, 1);
         }
         sendMessage(event, 'เครๆ')
     }else{
@@ -135,5 +163,27 @@ setInterval(function(){
                     lastTrigger = new Date().getTime();
                 }
             });
+    }
+}, 1000);
+
+
+setInterval(function(){
+    if(trackList.length > 0){
+        for (var i = 0; i < trackList.length; i++) {
+            var obj = trackList[i];
+            var hash = obj.hash;
+            var userId = obj.userId;
+            fetch('http://api.blockcypher.com/v1/btc/main/txs/'+hash)
+                .then(function(res) {
+                    return res.json();
+                }).then(function(res) {
+                    if(res.error){
+                        bot.push(userId,'ดู '+hash+' ไม่ได้นะ เลิก');
+                        trackList.splice(i, 1);
+                    }else{
+                        bot.push(userId,'คอนเฟิร์ม '+hash+' ได้ '+res.confirmations+' อะ');
+                    }
+                });
+        }
     }
 }, 1000);
