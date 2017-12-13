@@ -1,6 +1,5 @@
 var linebot = require('linebot');
 var fetch = require('node-fetch');
-var webshot = require('webshot');
 
 var observerList = [];
 var trackList = [];
