@@ -19,6 +19,7 @@ var sendMessage = function(event, message){
 }
 
 var chart = function(bot, userId){
+    console.log('Start capture')
     var options = {
         screenSize: {
             width: 1600,
@@ -35,7 +36,7 @@ var chart = function(bot, userId){
     };
 
     webshot('https://bx.in.th', 'chart.png', options, function(error) {
-        console.log(error)
+        console.log('Capture error',error)
     });
 
     bot.push(userId, {
