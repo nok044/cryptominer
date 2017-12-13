@@ -36,8 +36,8 @@ var chart = function(userId){
     webshot('https://bx.in.th', 'chart.png', options, function(err) {
         bot.push(userId, {
             type: 'image',
-            originalContentUrl: '',
-            previewImageUrl: ''
+            originalContentUrl: 'https://cryptominer.herokuapp.com/public/chart.png',
+            previewImageUrl: 'https://cryptominer.herokuapp.com/public/chart.png'
         });
     });
 }
@@ -131,7 +131,7 @@ var port = process.env.PORT || 3000;
 console.log('Listening on ' + port);
 bot.listen('/linewebhook', port);
 
-app.use(serveStatic('public/chart.png', {'index': ['chart.png']}))
+app.use(serveStatic('public', {'index': ['chart.png']}))
 app.listen(port)
 
 var lastTrigger = new Date().getTime();
