@@ -177,8 +177,8 @@ setInterval(function(){
                             type: 'text',
                             text: str
                         });
+                        chart(userId);
                     }
-                    chart(userId);
                     multiply = 1;
                     lastTrigger = new Date().getTime();
                 }else if(new Date().getTime() - lastTrigger >= 60000 * multiply){
@@ -194,8 +194,8 @@ setInterval(function(){
                             type: 'text',
                             text: str
                         });
+                        chart(userId);
                     }
-                    chart(userId);
                     multiply++;
                     lastTrigger = new Date().getTime();
                 }
