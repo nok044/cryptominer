@@ -1,14 +1,9 @@
 var linebot = require('linebot');
 var fetch = require('node-fetch');
 var webshot = require('webshot');
-var express = require('express')
-var serveStatic = require('serve-static')
-
-var app = express()
 
 var observerList = [];
 var trackList = [];
-
 
 var sendMessage = function(event, message){
     event.reply(message).then(function (data) {
@@ -18,32 +13,6 @@ var sendMessage = function(event, message){
     });
 }
 
-var chart = function(bot, userId){
-    var options = {
-        screenSize: {
-            width: 1600,
-            height: 900
-        },
-        shotSize: {
-            width: 530,
-            height: 245
-        },
-        shotOffset: {
-            top: 310,
-            left: 843
-        }
-    };
-
-    webshot('https://bx.in.th', 'chart.png', options, function(error) {
-        console.log(error)
-    });
-
-    bot.push(userId, {
-        type: 'image',
-        originalContentUrl: 'https://cryptominer.herokuapp.com/public/chart.png',
-        previewImageUrl: 'https://cryptominer.herokuapp.com/public/chart.png'
-    });
-}
 var bot = linebot({
     channelId: 1551062364,
     channelSecret: '63fd859fc1f1c2722a27aed1bd27324d',
@@ -131,11 +100,7 @@ bot.on('message', function (event) {
 
 var port = process.env.PORT || 3000;
 console.log('Listening on ' + port);
-
-const linebotParser = bot.parser();
-app.post('/linewebhook', linebotParser);
-app.use(serveStatic('public', {'index': ['chart.png']}))
-app.listen(port)
+bot.listen('/linewebhook', port);
 
 var lastTrigger = new Date().getTime();
 var multiply = 1;
@@ -163,7 +128,6 @@ setInterval(function(){
                 var str = 'BTC Latest: '+currentLatest+' High: '+max+' Low: '+min+' Avg: '+avg;
                 var currentState = currentLatest === max ? 'up' : currentLatest === min ? 'down' : state === undefined ? max - avg > avg - min ? 'up' : 'down' : state;
                 console.log(state,currentState,str)
-
                 if(state === undefined || state !== currentState){
                     if(latest === undefined)
                         latest = currentLatest;
@@ -179,7 +143,6 @@ setInterval(function(){
                             type: 'text',
                             text: str
                         });
-                        chart(bot,userId);
                     }
                     multiply = 1;
                     lastTrigger = new Date().getTime();
@@ -196,7 +159,6 @@ setInterval(function(){
                             type: 'text',
                             text: str
                         });
-                        chart(bot,userId);
                     }
                     multiply++;
                     lastTrigger = new Date().getTime();
