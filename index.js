@@ -33,12 +33,14 @@ var sendMessage = function(event, message){
 }
 
 var chart = function(userId){
-    webshot('https://bx.in.th', 'chart.png', options, function(err) {
-        bot.push(userId, {
-            type: 'image',
-            originalContentUrl: 'https://cryptominer.herokuapp.com/public/chart.png',
-            previewImageUrl: 'https://cryptominer.herokuapp.com/public/chart.png'
-        });
+    webshot('https://bx.in.th', 'chart.png', options, function(error) {
+        console.log(error)
+    });
+
+    bot.push(userId, {
+        type: 'image',
+        originalContentUrl: 'https://cryptominer.herokuapp.com/public/chart.png',
+        previewImageUrl: 'https://cryptominer.herokuapp.com/public/chart.png'
     });
 }
 
