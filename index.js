@@ -9,20 +9,6 @@ var app = express()
 var observerList = [];
 var trackList = [];
 
-var options = {
-    screenSize: {
-        width: 1600,
-        height: 900
-    },
-    shotSize: {
-        width: 530,
-        height: 245
-    },
-    shotOffset: {
-        top: 310,
-        left: 843
-    }
-};
 
 var sendMessage = function(event, message){
     event.reply(message).then(function (data) {
@@ -32,7 +18,22 @@ var sendMessage = function(event, message){
     });
 }
 
-var chart = function(userId){
+var chart = function(bot, userId){
+    var options = {
+        screenSize: {
+            width: 1600,
+            height: 900
+        },
+        shotSize: {
+            width: 530,
+            height: 245
+        },
+        shotOffset: {
+            top: 310,
+            left: 843
+        }
+    };
+
     webshot('https://bx.in.th', 'chart.png', options, function(error) {
         console.log(error)
     });
@@ -43,7 +44,6 @@ var chart = function(userId){
         previewImageUrl: 'https://cryptominer.herokuapp.com/public/chart.png'
     });
 }
-
 var bot = linebot({
     channelId: 1551062364,
     channelSecret: '63fd859fc1f1c2722a27aed1bd27324d',
@@ -179,7 +179,7 @@ setInterval(function(){
                             type: 'text',
                             text: str
                         });
-                        chart(userId);
+                        chart(bot,userId);
                     }
                     multiply = 1;
                     lastTrigger = new Date().getTime();
@@ -196,7 +196,7 @@ setInterval(function(){
                             type: 'text',
                             text: str
                         });
-                        chart(userId);
+                        chart(bot,userId);
                     }
                     multiply++;
                     lastTrigger = new Date().getTime();
