@@ -129,8 +129,9 @@ bot.on('message', function (event) {
 
 var port = process.env.PORT || 3000;
 console.log('Listening on ' + port);
-bot.listen('/linewebhook', port);
 
+const linebotParser = bot.parser();
+app.post('/linewebhook', linebotParser);
 app.use(serveStatic('public', {'index': ['chart.png']}))
 app.listen(port)
 
