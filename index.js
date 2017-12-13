@@ -1,14 +1,44 @@
 var linebot = require('linebot');
 var fetch = require('node-fetch');
+var webshot = require('webshot');
+var express = require('express')
+var serveStatic = require('serve-static')
+
+var app = express()
 
 var observerList = [];
 var trackList = [];
+
+var options = {
+    screenSize: {
+        width: 1600,
+        height: 900
+    },
+    shotSize: {
+        width: 530,
+        height: 245
+    },
+    shotOffset: {
+        top: 310,
+        left: 843
+    }
+};
 
 var sendMessage = function(event, message){
     event.reply(message).then(function (data) {
         console.log(data)
     }).catch(function (error) {
         console.log(error)
+    });
+}
+
+var chart = function(userId){
+    webshot('https://bx.in.th', 'chart.png', options, function(err) {
+        bot.push(userId, {
+            type: 'image',
+            originalContentUrl: '',
+            previewImageUrl: ''
+        });
     });
 }
 
@@ -101,6 +131,9 @@ var port = process.env.PORT || 3000;
 console.log('Listening on ' + port);
 bot.listen('/linewebhook', port);
 
+app.use(serveStatic('public/chart.png', {'index': ['chart.png']}))
+app.listen(port)
+
 var lastTrigger = new Date().getTime();
 var multiply = 1;
 var state;
@@ -127,6 +160,7 @@ setInterval(function(){
                 var str = 'BTC Latest: '+currentLatest+' High: '+max+' Low: '+min+' Avg: '+avg;
                 var currentState = currentLatest === max ? 'up' : currentLatest === min ? 'down' : state === undefined ? max - avg > avg - min ? 'up' : 'down' : state;
                 console.log(state,currentState,str)
+
                 if(state === undefined || state !== currentState){
                     if(latest === undefined)
                         latest = currentLatest;
@@ -143,6 +177,7 @@ setInterval(function(){
                             text: str
                         });
                     }
+                    chart(userId);
                     multiply = 1;
                     lastTrigger = new Date().getTime();
                 }else if(new Date().getTime() - lastTrigger >= 60000 * multiply){
@@ -159,6 +194,7 @@ setInterval(function(){
                             text: str
                         });
                     }
+                    chart(userId);
                     multiply++;
                     lastTrigger = new Date().getTime();
                 }
