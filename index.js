@@ -41,7 +41,7 @@ bot.on('message', function (event) {
                 });
 
                 if(!found){
-                    sendMessage(event, 'BTC to BTH '+res["1"].last_price+' '+res["1"].change+'%')
+                    sendMessage(event, 'อะไรๆ เดี๋ย')
                 }
             });
     }else if(message === 'รายงานมาซิ'){
