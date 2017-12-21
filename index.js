@@ -6,6 +6,8 @@ var jsonfile = require('jsonfile')
 var observerList = [];
 var trackList = [];
 
+var last_price = 0;
+
 var wallet = [
     {
         userId:'U6feb23bd2bbf0ea1aa013325c1fda8bb',
@@ -183,7 +185,7 @@ var checkBalance = function(event, id){
                 }).then(function(res) {
                     Object.keys(res).forEach(function(key,index) {
                         if((res[key].primary_currency === currents[0] && res[key].secondary_currency === currents[1]) || (res[key].primary_currency === currents[1] && res[key].secondary_currency === currents[0])){
-                            var last_price = res[key].last_price;
+                            last_price = res[key].last_price;
                             for(var c = 0;c<obj.address.length;c++){
                                 var addr = obj.address[c];
                                 fetch('http://api.blockcypher.com/v1/btc/main/addrs/'+addr.hash)
