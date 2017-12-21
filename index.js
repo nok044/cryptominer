@@ -246,7 +246,7 @@ var checkBalance3 = function(obj,addr,id){
                 bot.push(id,addr.name+': Balance '+balance+' - '+(last_price*balance));
                 bot.push(id,addr.name+': Unconfirmed '+unconfirmed_balance+' - '+(last_price*unconfirmed_balance));
 
-                if(obj.count == obj.address.length){
+                if(obj.count === obj.address.length){
                     bot.push(id,'รวม Balance '+obj.balance+' - '+(last_price*obj.balance));
                     bot.push(id,'รวม Unconfirmed '+obj.unconfirmed_balance+' - '+(last_price*obj.unconfirmed_balance));
                 }
