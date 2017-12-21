@@ -20,7 +20,8 @@ var bot = linebot({
 
 bot.on('message', function (event) {
     var message = event.message.text;
-
+    var id = event.source.type === 'group' ? event.source.groupId : event.source.userId;
+    console.log('my:'+id)
 
     if(message.length === 6){
         var currents = [
