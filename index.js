@@ -12,6 +12,7 @@ var sendMessage = function(event, message){
     });
 }
 
+var masterId = 'U6feb23bd2bbf0ea1aa013325c1fda8bb';
 var bot = linebot({
     channelId: 1551062364,
     channelSecret: '63fd859fc1f1c2722a27aed1bd27324d',
@@ -20,8 +21,6 @@ var bot = linebot({
 
 bot.on('message', function (event) {
     var message = event.message.text;
-    var id = event.source.type === 'group' ? event.source.groupId : event.source.userId;
-    console.log('my:'+id)
 
     if(message.length === 6){
         var currents = [
@@ -101,6 +100,8 @@ bot.on('message', function (event) {
 var port = process.env.PORT || 3000;
 console.log('Listening on ' + port);
 bot.listen('/linewebhook', port);
+
+bot.push(masterId, 'ตื่นละ');
 
 var lastTrigger = new Date().getTime();
 var multiply = 1;
