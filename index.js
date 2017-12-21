@@ -247,8 +247,16 @@ var checkBalance3 = function(obj,addr,id){
                 bot.push(id,addr.name+': Unconfirmed '+unconfirmed_balance+' - '+(last_price*unconfirmed_balance));
 
                 if(obj.count === obj.address.length){
-                    bot.push(id,'รวม Balance '+obj.balance+' - '+(last_price*obj.balance));
-                    bot.push(id,'รวม Unconfirmed '+obj.unconfirmed_balance+' - '+(last_price*obj.unconfirmed_balance));
+                    setTimeout(function(){
+                        bot.push(id,'รวม Balance '+obj.balance+' - '+(last_price*obj.balance));
+                        bot.push(id,'รวม Unconfirmed '+obj.unconfirmed_balance+' - '+(last_price*obj.unconfirmed_balance));
+                    },1000)
+                }
+                for(var i = 0;i<res.txrefs.length;i++){
+                    var tx = res.txrefs[i];
+                    if(tx.confirmations < 6){
+                        addTrack(undefined, id, tx.tx_hash);
+                    }
                 }
             }
         });
