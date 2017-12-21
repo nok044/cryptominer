@@ -43,6 +43,9 @@ var wallet = [
             {
                 name:'HashFlare',
                 hash:'3CYW5BoFJsVWFZsspkrkU9hmjtv2AmDSo8'
+            },            {
+                name:'c57b1fac20fb4a49135dc6ca2dd73e0aaad67459a2f84b8daff096f176a41531',
+                hash:'3QaVp49zowjKU4fBH7e5bGoxcUyjeujLua'
             }
         ],
         count: 0,
