@@ -7,11 +7,13 @@ var observerList = [];
 var trackList = [];
 
 jsonfile.readFile('./tmp/observerList', function(err, obj) {
-    console.dir(err,obj)
+    if(!err)
+        observerList = obj;
 });
 
 jsonfile.readFile('./tmp/trackList', function(err, obj) {
-    console.dir(err,obj)
+    if(!err)
+        trackList = obj;
 })
 
 var sendMessage = function(event, message){
@@ -61,6 +63,10 @@ var addReport = function(event, id){
     }else{
         sendMessage(event, 'ก็รายงานอยู่นี้ไง ใจเย็นดิ')
     }
+
+    jsonfile.writeFile('./tmp/observerList', observerList, function (err) {
+        console.error(err)
+    })
 }
 
 var removeReport = function(event, id){
@@ -70,6 +76,10 @@ var removeReport = function(event, id){
             observerList.splice(i, 1);
     }
     sendMessage(event, 'เครๆ')
+
+    jsonfile.writeFile('./tmp/observerList', observerList, function (err) {
+        console.error(err)
+    })
 }
 
 var addTrack = function(event, id, hash){
@@ -88,6 +98,10 @@ var addTrack = function(event, id, hash){
     }else{
         sendMessage(event, 'ก็รายงานอยู่นี้ไง ใจเย็นดิ')
     }
+
+    jsonfile.writeFile('./tmp/trackList', trackList, function (err) {
+        console.error(err)
+    })
 }
 
 var removeTrack = function(event, id, hash){
@@ -97,6 +111,10 @@ var removeTrack = function(event, id, hash){
             trackList.splice(i, 1);
     }
     sendMessage(event, 'เครๆ')
+
+    jsonfile.writeFile('./tmp/trackList', trackList, function (err) {
+        console.error(err)
+    })
 }
 
 
