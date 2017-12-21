@@ -1,7 +1,6 @@
 var linebot = require('linebot');
 var fetch = require('node-fetch');
 var express = require('express');
-var jsonfile = require('jsonfile')
 
 var observerList = [];
 var trackList = [];
@@ -54,21 +53,6 @@ var wallet = [
     }
 ]
 
-jsonfile.readFile('/tmp/observerList', function(err, obj) {
-    if(!err) {
-        console.log(obj);
-        observerList = obj;
-    }
-});
-
-jsonfile.readFile('/tmp/trackList', function(err, obj) {
-    if(!err) {
-        console.log(obj);
-        trackList = obj;
-    }
-})
-
-
 var sendMessage = function(event, message){
     if(event !== undefined) {
         event.reply(message).then(function (data) {
@@ -116,10 +100,6 @@ var addReport = function(event, id){
     }else{
         sendMessage(event, 'ก็รายงานอยู่นี้ไง ใจเย็นดิ')
     }
-
-    jsonfile.writeFile('/tmp/observerList', observerList, function (err) {
-        console.error(err)
-    })
 }
 
 var removeReport = function(event, id){
@@ -129,10 +109,6 @@ var removeReport = function(event, id){
             observerList.splice(i, 1);
     }
     sendMessage(event, 'เครๆ')
-
-    jsonfile.writeFile('/tmp/observerList', observerList, function (err) {
-        console.error(err)
-    })
 }
 
 var addTrack = function(event, id, hash){
@@ -151,10 +127,6 @@ var addTrack = function(event, id, hash){
     }else{
         sendMessage(event, 'ก็รายงานอยู่นี้ไง ใจเย็นดิ')
     }
-
-    jsonfile.writeFile('/tmp/trackList', trackList, function (err) {
-        console.error(err)
-    })
 }
 
 var removeTrack = function(event, id, hash){
@@ -164,10 +136,6 @@ var removeTrack = function(event, id, hash){
             trackList.splice(i, 1);
     }
     sendMessage(event, 'เครๆ')
-
-    jsonfile.writeFile('/tmp/trackList', trackList, function (err) {
-        console.error(err)
-    })
 }
 
 var checkBalance = function(event, id){
@@ -274,21 +242,23 @@ bot.on('message', function (event) {
     var id = event.source.type === 'group' ? event.source.groupId : event.source.userId;
     var message = event.message.text;
 
-    if(message.length === 6){
-        checkLast(event, message);
-    }else if(message === 'รายงานมาซิ'){
-        addReport(event,id);
-    }else if(message === 'พอได้แล้ว') {
-        removeReport(event,id);
-    }else if(message.indexOf('ติดตามอันนี้') === 0){
-        var hash = message.substr('ติดตามอันนี้'.length).trim();
-        addTrack(event, id, hash);
-    }else if(message.indexOf('เลิกดูอันนี้') === 0){
-        var hash = message.substr('เลิกดูอันนี้'.length).trim();
-        removeTrack(event, id, hash);
-    }else if(message.indexOf('ดูบัญชี') === 0){
-        checkBalance(event, id);
-    }else{
+    if(message) {
+        if (message.length === 6) {
+            checkLast(event, message);
+        } else if (message === 'รายงานมาซิ') {
+            addReport(event, id);
+        } else if (message === 'พอได้แล้ว') {
+            removeReport(event, id);
+        } else if (message.indexOf('ติดตามอันนี้') === 0) {
+            var hash = message.substr('ติดตามอันนี้'.length).trim();
+            addTrack(event, id, hash);
+        } else if (message.indexOf('เลิกดูอันนี้') === 0) {
+            var hash = message.substr('เลิกดูอันนี้'.length).trim();
+            removeTrack(event, id, hash);
+        } else if (message.indexOf('ดูบัญชี') === 0) {
+            checkBalance(event, id);
+        } else {
+        }
     }
 });
 
