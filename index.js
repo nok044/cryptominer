@@ -123,15 +123,15 @@ const app = express();
 const linebotParser = bot.parser();
 app.post('/linewebhook', linebotParser);
 app.post('/say',function (req, res) {
-    var userId = req.param('userId');
-    var msg = req.param('msg');
+    var userId =req.body.userId;
+    var msg = req.body.msg;
     res.send('OK')
     console.log('say',userId,msg);
     bot.push(userId, msg);
 });
 app.post('/track',function (req, res) {
-    var userId = req.param('userId');
-    var hash = req.param('hash');
+    var userId = req.body.userId;
+    var hash = req.body.hash;
     res.send('OK')
     console.log('track',userId,msg);
     addTrack(undefined, userId, hash);
