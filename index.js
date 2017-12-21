@@ -402,6 +402,8 @@ var tracking = function(obj){
             return res.json();
         }).then(function(res) {
         if(res.error){
+            console.log(res.error)
+            bot.push(obj.userId,res.error);
             bot.push(obj.userId,'ดู '+obj.hash+' ไม่ได้นะ เลิก');
             removeTrack(undefined, obj.userId, obj.hash);
         }else{
