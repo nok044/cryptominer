@@ -170,78 +170,85 @@ var checkBalance = function(event, id){
     var found = false;
     for(var i = 0;i<wallet.length;i++){
         var obj = wallet[i];
-        var index = i;
         if(obj.userId === id){
             found = true;
             obj.balance = 0;
             obj.unconfirmed_balance = 0;
 
-            var currents = [
-                'BTC',
-                'THB'
-            ]
-            fetch('https://bx.in.th/api/')
-                .then(function(res) {
-                    return res.json();
-                }).then(function(res) {
-                    Object.keys(res).forEach(function(key,index) {
-                        if((res[key].primary_currency === currents[0] && res[key].secondary_currency === currents[1]) || (res[key].primary_currency === currents[1] && res[key].secondary_currency === currents[0])){
-                            last_price = res[key].last_price;
-                            for(var c = 0;c<obj.address.length;c++){
-                                var addr = obj.address[c];
-                                var name = addr.name;
-                                fetch('http://api.blockcypher.com/v1/btc/main/addrs/'+addr.hash)
-                                    .then(function(res) {
-                                        return res.json();
-                                    }).then(function(res) {
-                                        if(res.error){
-                                            bot.push(userId,'ดู '+hash+' ไม่ได้นะ เลิก');
-                                            removeTrack(undefined, userId, hash);
-                                        }else{
-                                            var tmp = res.balance+'';
-                                            if(tmp.length > 8){
-                                                tmp = tmp.substr(0,tmp.length - 8)+'.'+tmp.substr(tmp.length - 8);
-                                            }else{
-                                                for(var a = 8-tmp.length;a>0;a--){
-                                                    tmp = '0'+tmp;
-                                                }
-                                                tmp = '0.'+tmp;
-                                            }
-
-                                            var balance = parseFloat(tmp);
-
-                                            tmp = res.unconfirmed_balance+'';
-                                            if(tmp.length > 8){
-                                                tmp = tmp.substr(0,tmp.length - 8)+'.'+tmp.substr(tmp.length - 8);
-                                            }else{
-                                                for(var a = 8-tmp.length;a>0;a--){
-                                                    tmp = '0'+tmp;
-                                                }
-                                                tmp = '0.'+tmp;
-                                            }
-
-                                            var unconfirmed_balance = parseFloat(tmp);
-
-                                            wallet[index].balance += balance;
-                                            wallet[index].unconfirmed_balance += unconfirmed_balance;
-
-                                            bot.push(id,name+': Balance '+balance+' - '+(last_price*balance));
-                                            bot.push(id,name+': Unconfirmed '+unconfirmed_balance+' - '+(last_price*unconfirmed_balance));
-                                        }
-                                    });
-                            }
-
-                            bot.push(id,'รวม Balance '+obj.balance+' - '+(res[key].last_price*obj.balance));
-                            bot.push(id,'รวม Unconfirmed '+obj.unconfirmed_balance+' - '+(res[key].last_price*obj.unconfirmed_balance));
-                        }
-                    });
-                });
+            checkBalance2(obj,id);
         }
     }
 
     if(!found) {
         sendMessage(event, 'ไม่เจอบัญชีงะ');
     }
+}
+
+var checkBalance2 = function(obj, id){
+    var currents = [
+        'BTC',
+        'THB'
+    ]
+    fetch('https://bx.in.th/api/')
+        .then(function(res) {
+            return res.json();
+        }).then(function(res) {
+        Object.keys(res).forEach(function(key,index) {
+            if((res[key].primary_currency === currents[0] && res[key].secondary_currency === currents[1]) || (res[key].primary_currency === currents[1] && res[key].secondary_currency === currents[0])){
+                last_price = res[key].last_price;
+                for(var c = 0;c<obj.address.length;c++){
+                    var addr = obj.address[c];
+
+                    checkBalance3(obj,addr,id);
+                }
+
+                bot.push(id,'รวม Balance '+obj.balance+' - '+(last_price*obj.balance));
+                bot.push(id,'รวม Unconfirmed '+obj.unconfirmed_balance+' - '+(last_price*obj.unconfirmed_balance));
+            }
+        });
+    });
+}
+
+var checkBalance3 = function(obj,addr,id){
+    fetch('http://api.blockcypher.com/v1/btc/main/addrs/'+addr.hash)
+        .then(function(res) {
+            return res.json();
+        }).then(function(res) {
+            if(res.error){
+                bot.push(userId,'ดู '+hash+' ไม่ได้นะ เลิก');
+                removeTrack(undefined, userId, hash);
+            }else{
+                var tmp = res.balance+'';
+                if(tmp.length > 8){
+                    tmp = tmp.substr(0,tmp.length - 8)+'.'+tmp.substr(tmp.length - 8);
+                }else{
+                    for(var a = 8-tmp.length;a>0;a--){
+                        tmp = '0'+tmp;
+                    }
+                    tmp = '0.'+tmp;
+                }
+
+                var balance = parseFloat(tmp);
+
+                tmp = res.unconfirmed_balance+'';
+                if(tmp.length > 8){
+                    tmp = tmp.substr(0,tmp.length - 8)+'.'+tmp.substr(tmp.length - 8);
+                }else{
+                    for(var a = 8-tmp.length;a>0;a--){
+                        tmp = '0'+tmp;
+                    }
+                    tmp = '0.'+tmp;
+                }
+
+                var unconfirmed_balance = parseFloat(tmp);
+
+                obj.balance += balance;
+                obj.unconfirmed_balance += unconfirmed_balance;
+
+                bot.push(id,addr.name+': Balance '+balance+' - '+(last_price*balance));
+                bot.push(id,addr.name+': Unconfirmed '+unconfirmed_balance+' - '+(last_price*unconfirmed_balance));
+            }
+        });
 }
 
 var masterId = 'U6feb23bd2bbf0ea1aa013325c1fda8bb';
