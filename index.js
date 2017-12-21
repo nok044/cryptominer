@@ -246,13 +246,11 @@ var checkBalance3 = function(obj,addr,id){
                 obj.balance += balance;
                 obj.unconfirmed_balance += unconfirmed_balance;
                 obj.count++;
-                bot.push(id,addr.name+': Balance '+balance+' - '+(last_price*balance));
-                bot.push(id,addr.name+': Unconfirmed '+unconfirmed_balance+' - '+(last_price*unconfirmed_balance));
+                bot.push(id,addr.name+': Balance '+balance+' - '+(last_price*balance)+', Unconfirmed '+unconfirmed_balance+' - '+(last_price*unconfirmed_balance));
 
                 if(obj.count === obj.address.length){
                     setTimeout(function(){
-                        bot.push(id,'รวม Balance '+obj.balance+' - '+(last_price*obj.balance));
-                        bot.push(id,'รวม Unconfirmed '+obj.unconfirmed_balance+' - '+(last_price*obj.unconfirmed_balance));
+                        bot.push(id,'รวม Balance '+obj.balance+' - '+(last_price*obj.balance)+', Unconfirmed '+obj.unconfirmed_balance+' - '+(last_price*obj.unconfirmed_balance));
                     },1000)
                 }
                 for(var i = 0;i<res.txrefs.length;i++){
