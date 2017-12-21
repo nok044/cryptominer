@@ -126,14 +126,14 @@ app.post('/say',function (req, res) {
     var userId = req.param('userId');
     var msg = req.param('msg');
     res.send('OK')
-
+    console.log('say',userId,msg);
     bot.push(userId, msg);
 });
 app.post('/track',function (req, res) {
     var userId = req.param('userId');
     var hash = req.param('hash');
     res.send('OK')
-
+    console.log('track',userId,msg);
     addTrack(undefined, userId, hash);
 });
 app.listen(port);
