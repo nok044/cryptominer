@@ -170,6 +170,7 @@ var checkBalance = function(event, id){
     var found = false;
     for(var i = 0;i<wallet.length;i++){
         var obj = wallet[i];
+        var index = i;
         if(obj.userId === id){
             found = true;
             obj.balance = 0;
@@ -186,9 +187,9 @@ var checkBalance = function(event, id){
                     Object.keys(res).forEach(function(key,index) {
                         if((res[key].primary_currency === currents[0] && res[key].secondary_currency === currents[1]) || (res[key].primary_currency === currents[1] && res[key].secondary_currency === currents[0])){
                             last_price = res[key].last_price;
-                            var name = addr.name;
                             for(var c = 0;c<obj.address.length;c++){
                                 var addr = obj.address[c];
+                                var name = addr.name;
                                 fetch('http://api.blockcypher.com/v1/btc/main/addrs/'+addr.hash)
                                     .then(function(res) {
                                         return res.json();
@@ -221,8 +222,8 @@ var checkBalance = function(event, id){
 
                                             var unconfirmed_balance = parseFloat(tmp);
 
-                                            obj.balance += balance;
-                                            obj.unconfirmed_balance += unconfirmed_balance;
+                                            wallet[index].balance += balance;
+                                            wallet[index].unconfirmed_balance += unconfirmed_balance;
 
                                             bot.push(id,name+': Balance '+balance+' - '+(last_price*balance));
                                             bot.push(id,name+': Unconfirmed '+unconfirmed_balance+' - '+(last_price*unconfirmed_balance));
