@@ -7,13 +7,17 @@ var observerList = [];
 var trackList = [];
 
 jsonfile.readFile('/tmp/observerList', function(err, obj) {
-    if(!err)
+    if(!err) {
+        console.log(obj);
         observerList = obj;
+    }
 });
 
 jsonfile.readFile('/tmp/trackList', function(err, obj) {
-    if(!err)
+    if(!err) {
+        console.log(obj);
         trackList = obj;
+    }
 })
 
 var sendMessage = function(event, message){
