@@ -45,6 +45,7 @@ var wallet = [
                 hash:'3CYW5BoFJsVWFZsspkrkU9hmjtv2AmDSo8'
             }
         ],
+        count: 0,
         balance: 0,
         unconfirmed_balance: 0,
     }
@@ -174,7 +175,7 @@ var checkBalance = function(event, id){
             found = true;
             obj.balance = 0;
             obj.unconfirmed_balance = 0;
-
+            obj.count = 0;
             checkBalance2(obj,id);
         }
     }
@@ -201,9 +202,6 @@ var checkBalance2 = function(obj, id){
 
                     checkBalance3(obj,addr,id);
                 }
-
-                bot.push(id,'รวม Balance '+obj.balance+' - '+(last_price*obj.balance));
-                bot.push(id,'รวม Unconfirmed '+obj.unconfirmed_balance+' - '+(last_price*obj.unconfirmed_balance));
             }
         });
     });
@@ -244,9 +242,14 @@ var checkBalance3 = function(obj,addr,id){
 
                 obj.balance += balance;
                 obj.unconfirmed_balance += unconfirmed_balance;
-
+                obj.count++;
                 bot.push(id,addr.name+': Balance '+balance+' - '+(last_price*balance));
                 bot.push(id,addr.name+': Unconfirmed '+unconfirmed_balance+' - '+(last_price*unconfirmed_balance));
+
+                if(obj.count == obj.address.length){
+                    bot.push(id,'รวม Balance '+obj.balance+' - '+(last_price*obj.balance));
+                    bot.push(id,'รวม Unconfirmed '+obj.unconfirmed_balance+' - '+(last_price*obj.unconfirmed_balance));
+                }
             }
         });
 }
@@ -377,22 +380,24 @@ setInterval(function(){
     if(trackList.length > 0){
         for (var i = 0; i < trackList.length; i++) {
             var obj = trackList[i];
-            var hash = obj.hash;
-            var userId = obj.userId;
-            fetch('http://api.blockcypher.com/v1/btc/main/txs/'+hash)
-                .then(function(res) {
-                    return res.json();
-                }).then(function(res) {
-                    if(res.error){
-                        bot.push(userId,'ดู '+hash+' ไม่ได้นะ เลิก');
-                        removeTrack(undefined, userId, hash);
-                    }else{
-                        if(res.confirmations !== obj.confirmations) {
-                            bot.push(userId, 'คอนเฟิร์ม ' + hash + ' ได้ ' + res.confirmations + ' อะ');
-                            obj.confirmations = res.confirmations;
-                        }
-                    }
-                });
+            tracking(obj);
         }
     }
 }, 40000);
+
+var tracking = function(obj){
+    fetch('http://api.blockcypher.com/v1/btc/main/txs/'+obj.hash)
+        .then(function(res) {
+            return res.json();
+        }).then(function(res) {
+        if(res.error){
+            bot.push(obj.userId,'ดู '+obj.hash+' ไม่ได้นะ เลิก');
+            removeTrack(undefined, obj.userId, obj.hash);
+        }else{
+            if(res.confirmations !== obj.confirmations) {
+                bot.push(obj.userId, 'คอนเฟิร์ม ' + obj.hash + ' ได้ ' + res.confirmations + ' อะ');
+                obj.confirmations = res.confirmations;
+            }
+        }
+    });
+}
