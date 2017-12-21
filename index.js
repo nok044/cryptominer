@@ -6,6 +6,46 @@ var jsonfile = require('jsonfile')
 var observerList = [];
 var trackList = [];
 
+var wallet = [
+    {
+        userId:'U6feb23bd2bbf0ea1aa013325c1fda8bb',
+        address: [
+            {
+                name:'Main',
+                hash:'3FHfwQxiZbQZ5A2xKmtPgw2J9z8M4vs89g'
+            },
+            {
+                name:'Mnok044',
+                hash:'3JcMi3S49BmMj3YAeChQ26oCoDPdvGi3Bh'
+            },
+            {
+                name:'Msuchedc',
+                hash:'3BUz4uECJ6L95AvDgEYn2QE73QmwnH3weK'
+            },
+            {
+                name:'Mss01',
+                hash:'3AJHfthZyhFc1Ca4RmkL4ULtSCiK5i5aph'
+            },
+            {
+                name:'Mss02',
+                hash:'3KhovaqHPuXW8nkVS8b6pRyqV7syyMsA9X'
+            },
+            {
+                name:'Mmp01',
+                hash:'3Eai7kz7ZKgLoHUDuatdzzFnGsr2gwwwGG'
+            },
+            {
+                name:'Msp01',
+                hash:'31szpDMe6veMaFMpWjKQKE8MWz4VDnYrnS'
+            },
+            {
+                name:'HashFlare',
+                hash:'3CYW5BoFJsVWFZsspkrkU9hmjtv2AmDSo8'
+            }
+        ]
+    }
+]
+
 jsonfile.readFile('/tmp/observerList', function(err, obj) {
     if(!err) {
         console.log(obj);
@@ -19,6 +59,7 @@ jsonfile.readFile('/tmp/trackList', function(err, obj) {
         trackList = obj;
     }
 })
+
 
 var sendMessage = function(event, message){
     if(event !== undefined) {
@@ -167,6 +208,10 @@ app.post('/track',function (req, res) {
     res.send('OK')
     console.log('track',userId,msg);
     addTrack(undefined, userId, hash);
+});
+app.post('/ping',function (req, res) {
+    res.send('OK')
+    console.log('ping');
 });
 app.listen(port);
 
