@@ -394,7 +394,7 @@ setInterval(function(){
             tracking(obj);
         }
     }
-}, 40000);
+}, 120000);
 
 var tracking = function(obj){
     fetch('http://api.blockcypher.com/v1/btc/main/txs/'+obj.hash)
