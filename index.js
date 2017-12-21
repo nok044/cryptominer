@@ -1,16 +1,95 @@
 var linebot = require('linebot');
 var fetch = require('node-fetch');
+var express = require('express');
 
 var observerList = [];
 var trackList = [];
 
 var sendMessage = function(event, message){
-    event.reply(message).then(function (data) {
-        console.log(data)
-    }).catch(function (error) {
-        console.log(error)
+    if(event !== undefined) {
+        event.reply(message).then(function (data) {
+            console.log(data)
+        }).catch(function (error) {
+            console.log(error)
+        });
+    }
+}
+
+var checkLast = function(event, str){
+    var currents = [
+        str.substring(0,3),
+        str.substring(3,6)
+    ]
+
+    fetch('https://bx.in.th/api/')
+        .then(function(res) {
+            return res.json();
+        }).then(function(res) {
+        var found = false;
+        Object.keys(res).forEach(function(key,index) {
+            if((res[key].primary_currency === currents[0] && res[key].secondary_currency === currents[1]) || (res[key].primary_currency === currents[1] && res[key].secondary_currency === currents[0])){
+                found = true;
+                sendMessage(event, res[key].primary_currency+' to '+res[key].secondary_currency+' '+res[key].last_price+' '+res[key].change+'%')
+            }
+        });
+
+        if(!found){
+            sendMessage(event, 'อะไรๆ เดี๋ย')
+        }
     });
 }
+
+var addReport = function(event, id){
+    var found = false;
+    for(var i = 0;i<observerList.length;i++){
+        var userId = observerList[i];
+        if(userId === id)
+            found = true;
+    }
+    if(!found) {
+        sendMessage(event, 'รอแปป')
+        observerList.push(id);
+    }else{
+        sendMessage(event, 'ก็รายงานอยู่นี้ไง ใจเย็นดิ')
+    }
+}
+
+var removeReport = function(event, id){
+    for (var i = 0; i < observerList.length; i++) {
+        var userId = observerList[i];
+        if (userId === id)
+            observerList.splice(i, 1);
+    }
+    sendMessage(event, 'เครๆ')
+}
+
+var addTrack = function(event, id, hash){
+    var found = false;
+    for(var i = 0;i<trackList.length;i++){
+        var obj = trackList[i];
+        if(obj.userId === id && obj.hash === hash)
+            found = true;
+    }
+    if(!found) {
+        sendMessage(event, 'รอแปป')
+        trackList.push({
+            userId: id,
+            hash: hash
+        });
+    }else{
+        sendMessage(event, 'ก็รายงานอยู่นี้ไง ใจเย็นดิ')
+    }
+}
+
+var removeTrack = function(event, id, hash){
+    for (var i = 0; i < trackList.length; i++) {
+        var obj = trackList[i];
+        if(obj.userId === id && obj.hash === hash)
+            trackList.splice(i, 1);
+    }
+    sendMessage(event, 'เครๆ')
+}
+
 
 var masterId = 'U6feb23bd2bbf0ea1aa013325c1fda8bb';
 var bot = linebot({
@@ -20,86 +99,44 @@ var bot = linebot({
 });
 
 bot.on('message', function (event) {
+    var id = event.source.type === 'group' ? event.source.groupId : event.source.userId;
     var message = event.message.text;
 
     if(message.length === 6){
-        var currents = [
-            message.substring(0,3),
-            message.substring(3,6)
-        ]
-
-        fetch('https://bx.in.th/api/')
-            .then(function(res) {
-                return res.json();
-            }).then(function(res) {
-                var found = false;
-                Object.keys(res).forEach(function(key,index) {
-                    if((res[key].primary_currency === currents[0] && res[key].secondary_currency === currents[1]) || (res[key].primary_currency === currents[1] && res[key].secondary_currency === currents[0])){
-                        found = true;
-                        sendMessage(event, res[key].primary_currency+' to '+res[key].secondary_currency+' '+res[key].last_price+' '+res[key].change+'%')
-                    }
-                });
-
-                if(!found){
-                    sendMessage(event, 'อะไรๆ เดี๋ย')
-                }
-            });
+        checkLast(event, message);
     }else if(message === 'รายงานมาซิ'){
-        var id = event.source.type === 'group' ? event.source.groupId : event.source.userId;
-        var found = false;
-        for(var i = 0;i<observerList.length;i++){
-            var userId = observerList[i];
-            if(userId === id)
-                found = true;
-        }
-        if(!found) {
-            sendMessage(event, 'รอแปป')
-            observerList.push(id);
-        }else{
-            sendMessage(event, 'ก็รายงานอยู่นี้ไง ใจเย็นดิ')
-        }
+        addReport(event,id);
     }else if(message === 'พอได้แล้ว') {
-        var id = event.source.type === 'group' ? event.source.groupId : event.source.userId;
-        for (var i = 0; i < observerList.length; i++) {
-            var userId = observerList[i];
-            if (userId === id)
-                observerList.splice(i, 1);
-        }
-        sendMessage(event, 'เครๆ')
+        removeReport(event,id);
     }else if(message.indexOf('ติดตามอันนี้') === 0){
         var hash = message.substr('ติดตามอันนี้'.length).trim();
-        var id = event.source.type === 'group' ? event.source.groupId : event.source.userId;
-        var found = false;
-        for(var i = 0;i<trackList.length;i++){
-            var obj = trackList[i];
-            if(obj.userId === id && obj.hash === hash)
-                found = true;
-        }
-        if(!found) {
-            sendMessage(event, 'รอแปป')
-            trackList.push({
-                userId: id,
-                hash: hash
-            });
-        }else{
-            sendMessage(event, 'ก็รายงานอยู่นี้ไง ใจเย็นดิ')
-        }
+        addTrack(event, id, hash);
     }else if(message.indexOf('เลิกดูอันนี้') === 0){
         var hash = message.substr('เลิกดูอันนี้'.length).trim();
-        var id = event.source.type === 'group' ? event.source.groupId : event.source.userId;
-        for (var i = 0; i < trackList.length; i++) {
-            var obj = trackList[i];
-            if(obj.userId === id && obj.hash === hash)
-                trackList.splice(i, 1);
-        }
-        sendMessage(event, 'เครๆ')
+        removeTrack(event, id, hash);
     }else{
     }
 });
 
 var port = process.env.PORT || 3000;
-console.log('Listening on ' + port);
-bot.listen('/linewebhook', port);
+const app = express();
+const linebotParser = bot.parser();
+app.post('/linewebhook', linebotParser);
+app.post('/say',function (req, res) {
+    var userId = req.param('userId');
+    var msg = req.param('msg');
+    res.send('OK')
+
+    bot.push(userId, msg);
+});
+app.post('/track',function (req, res) {
+    var userId = req.param('userId');
+    var hash = req.param('hash');
+    res.send('OK')
+
+    addTrack(undefined, userId, hash);
+});
+app.listen(port);
 
 bot.push(masterId, 'ตื่นละ');
 
@@ -181,7 +218,7 @@ setInterval(function(){
                 }).then(function(res) {
                     if(res.error){
                         bot.push(userId,'ดู '+hash+' ไม่ได้นะ เลิก');
-                        trackList.splice(i, 1);
+                        removeTrack(undefined, userId, hash);
                     }else{
                         if(res.confirmations !== obj.confirmations) {
                             bot.push(userId, 'คอนเฟิร์ม ' + hash + ' ได้ ' + res.confirmations + ' อะ');
