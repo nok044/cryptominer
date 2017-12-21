@@ -1,9 +1,18 @@
 var linebot = require('linebot');
 var fetch = require('node-fetch');
 var express = require('express');
+var jsonfile = require('jsonfile')
 
 var observerList = [];
 var trackList = [];
+
+jsonfile.readFile('./tmp/observerList', function(err, obj) {
+    console.dir(err,obj)
+});
+
+jsonfile.readFile('./tmp/trackList', function(err, obj) {
+    console.dir(err,obj)
+})
 
 var sendMessage = function(event, message){
     if(event !== undefined) {
