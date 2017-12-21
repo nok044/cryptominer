@@ -186,6 +186,7 @@ var checkBalance = function(event, id){
                     Object.keys(res).forEach(function(key,index) {
                         if((res[key].primary_currency === currents[0] && res[key].secondary_currency === currents[1]) || (res[key].primary_currency === currents[1] && res[key].secondary_currency === currents[0])){
                             last_price = res[key].last_price;
+                            var name = addr.name;
                             for(var c = 0;c<obj.address.length;c++){
                                 var addr = obj.address[c];
                                 fetch('http://api.blockcypher.com/v1/btc/main/addrs/'+addr.hash)
@@ -223,14 +224,14 @@ var checkBalance = function(event, id){
                                             obj.balance += balance;
                                             obj.unconfirmed_balance += unconfirmed_balance;
 
-                                            bot.push(id,addr.name+': Balance '+balance+' - '+(last_price*balance));
-                                            bot.push(id,addr.name+': Unconfirmed '+unconfirmed_balance+' - '+(last_price*unconfirmed_balance));
+                                            bot.push(id,name+': Balance '+balance+' - '+(last_price*balance));
+                                            bot.push(id,name+': Unconfirmed '+unconfirmed_balance+' - '+(last_price*unconfirmed_balance));
                                         }
                                     });
                             }
 
-                            bot.push(id,'รวม '+obj.balance+' - '+(res[key].last_price*obj.balance));
-                            bot.push(id,'รวม '+obj.unconfirmed_balance+' - '+(res[key].last_price*obj.unconfirmed_balance));
+                            bot.push(id,'รวม Balance '+obj.balance+' - '+(res[key].last_price*obj.balance));
+                            bot.push(id,'รวม Unconfirmed '+obj.unconfirmed_balance+' - '+(res[key].last_price*obj.unconfirmed_balance));
                         }
                     });
                 });
