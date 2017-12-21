@@ -183,6 +183,7 @@ var checkBalance = function(event, id){
                 }).then(function(res) {
                     Object.keys(res).forEach(function(key,index) {
                         if((res[key].primary_currency === currents[0] && res[key].secondary_currency === currents[1]) || (res[key].primary_currency === currents[1] && res[key].secondary_currency === currents[0])){
+                            console.log(obj.address.length);
                             for(var c = 0;c<obj.address.length;c++){
                                 var addr = obj.address[c];
                                 fetch('http://api.blockcypher.com/v1/btc/main/addrs/'+addr.hash)
