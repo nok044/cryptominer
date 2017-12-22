@@ -278,7 +278,7 @@ app.post('/track',function (req, res) {
     var userId = req.body.userId;
     var hash = req.body.hash;
     res.send('OK')
-    console.log('track',userId,msg);
+    console.log('track',userId,hash);
     addTrack(undefined, userId, hash);
 });
 app.post('/ping',function (req, res) {
