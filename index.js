@@ -264,6 +264,8 @@ bot.on('message', function (event) {
 });
 bot.on('beacon', function (event) {
     console.log(event)
+
+    sendMessage(event, event.beacon.type);
 });
 
 var port = process.env.PORT || 3000;
