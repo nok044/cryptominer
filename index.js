@@ -239,6 +239,7 @@ var bot = linebot({
 });
 
 bot.on('message', function (event) {
+    console.log(event)
     var id = event.source.type === 'group' ? event.source.groupId : event.source.userId;
     var message = event.message.text;
 
@@ -260,6 +261,9 @@ bot.on('message', function (event) {
         } else {
         }
     }
+});
+bot.on('beacon', function (event) {
+    console.log(event)
 });
 
 var port = process.env.PORT || 3000;
